@@ -1,6 +1,6 @@
 <?php
 
-namespace Albert\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Albert\View\View;
 use Symfony\Component\HttpFoundation\Request;

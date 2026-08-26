@@ -31,7 +31,9 @@
 ### Phase 7: Create CLI tools and project scaffolding
 - [x] Build command-line interface (CLI) tools for common tasks. (`bin/console` on Symfony Console: `route:list`, `make:controller`.)
 - [ ] Develop broader project scaffolding for quick setup (only controller generation exists so far).
-
+- [ ] add support for RestApi and GraphQL
+- [x] add support a custom folder so new development will be done there not on the main files (top-level `app/` directory, namespace `App\`, holds controllers/models/routes/views; `src/` is now framework-core only.)
+- [ ] add feature to generate a model setup (Controller , View and Module)
 ### Phase 8: Develop authentication and security features
 - [ ] Implement authentication and authorization mechanisms.
 - [ ] Integrate security best practices.

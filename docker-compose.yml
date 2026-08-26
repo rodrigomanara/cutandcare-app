@@ -5,7 +5,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./src:/var/www/html
+      - .:/var/www/html
       - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - php
@@ -15,6 +15,6 @@ services:
       context: docker # Or the path to your Dockerfile directory, e.g., ./docker/php
       dockerfile: ./Dockerfile-php
     volumes:
-      - ./src:/var/www/html
+      - .:/var/www/html
     deploy:
       replicas: 1

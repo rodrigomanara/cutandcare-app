@@ -8,6 +8,6 @@ use Symfony\Component\Console\Application;
 $kernel = require __DIR__ . '/../bootstrap.php';
 
 $app = new Application('Albert Framework', 'dev');
-$app->add(new MakeControllerCommand(__DIR__ . '/../Http/Controllers'));
+$app->add(new MakeControllerCommand(__DIR__ . '/../../app/Http/Controllers'));
 $app->add(new RouteListCommand($kernel->router()));
 $app->run();
