@@ -1,0 +1,5 @@
+/src/vendor/
+/src/.env
+/src/storage/*.sqlite
+/.idea/
+/src/.phpunit.result.cache

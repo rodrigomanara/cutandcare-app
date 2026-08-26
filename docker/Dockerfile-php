@@ -1,0 +1,26 @@
+FROM php:8.4-fpm
+
+# Install system dependencies and PHP extensions
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    git \
+    # Clean up cache to reduce image size
+    && rm -rf /var/lib/apt/lists/* \
+# Install and enable PHP extensions
+    && docker-php-ext-install pdo_mysql gd zip
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+
+    # Set the working directory
+WORKDIR /var/www/html
+
+# Expose port 9000 for PHP-FPM
+EXPOSE 9000
+
+# Start PHP-FPM
+CMD ["php-fpm"]
