@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\HomeController;
+use Albert\App\Http\Controllers\HomeController;
 use Albert\Http\Router;
 
 return function (Router $router): void {

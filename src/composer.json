@@ -30,9 +30,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Albert\\": "./",
-            "App\\": "../app/"
-        }
+            "Albert\\": "."
+            }
     },
     "autoload-dev": {
         "psr-4": {

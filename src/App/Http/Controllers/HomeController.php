@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Albert\App\Http\Controllers;
 
+use Albert\Http\Request;
+use Albert\Http\Response;
 use Albert\View\View;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
-class HomeController
+readonly class HomeController
 {
-    public function __construct(private readonly View $view)
+    public function __construct(private View $view)
     {
     }
 

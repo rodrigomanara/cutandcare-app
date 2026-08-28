@@ -1,4 +1,7 @@
-FROM php:8.4-fpm
+FROM php:8.5-fpm
+
+# Set the working directory
+WORKDIR /var/www/html
 
 # Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
@@ -9,15 +12,17 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     git \
-    # Clean up cache to reduce image size
-    && rm -rf /var/lib/apt/lists/* \
-# Install and enable PHP extensions
-    && docker-php-ext-install pdo_mysql gd zip
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    curl \
+    && docker-php-ext-install pdo_mysql gd zip \
+    && rm -rf /var/lib/apt/lists/*
 
+# Download composer.phar directly
+RUN curl -sS https://getcomposer.org/composer.phar -o /usr/local/bin/composer && chmod +x /usr/local/bin/composer
 
-    # Set the working directory
-WORKDIR /var/www/html
+# Create non-root user for security
+RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /var/www/html
+USER appuser
+
 
 # Expose port 9000 for PHP-FPM
 EXPOSE 9000

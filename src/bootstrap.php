@@ -16,7 +16,7 @@ if (file_exists(__DIR__ . '/.env')) {
 $kernel = new Kernel();
 $container = $kernel->container();
 
-$view = new View(__DIR__ . '/../app/resources/views', getenv('APP_DEBUG') === 'true');
+$view = new View(__DIR__ . '/App/resources/views', getenv('APP_DEBUG') === 'true');
 $container->instance(View::class, $view);
 
 $connection = Connection::fromEnv(__DIR__);
@@ -25,6 +25,6 @@ Model::setConnection($connection);
 
 $kernel->pushMiddleware(new AddHeaderMiddleware());
 
-(require __DIR__ . '/../app/routes/web.php')($kernel->router());
+(require __DIR__ . '/App/routes/web.php')($kernel->router());
 
-return $kernel;
+$kernel->run();

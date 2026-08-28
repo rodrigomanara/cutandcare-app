@@ -5,9 +5,9 @@ namespace Albert\Core;
 use Albert\Http\MiddlewareInterface;
 use Albert\Http\Router;
 use Closure;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
+use Albert\Http\Request;
+use Albert\Http\Response;
 
 class Kernel
 {

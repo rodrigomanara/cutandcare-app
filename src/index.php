@@ -1,5 +1,9 @@
 <?php
 
-$kernel = require __DIR__ . '/bootstrap.php';
 
-$kernel->run();
+try {
+     require __DIR__ . '/bootstrap.php';
+}catch (\Exception | \Throwable $e){
+    echo $e->getMessage();
+    echo $e->getFile();
+}
