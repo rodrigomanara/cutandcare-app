@@ -97,6 +97,11 @@ export function renderBookingEditForm(body, booking, { groupSize = 1, onCancel, 
       [f.end]: endAt.toISOString(),
       [f.notes]: form.elements.notes.value.trim(),
     };
+    // Keep the derived fields in step with the new times.
+    if (f.bookingDateTime) changes[f.bookingDateTime] = startAt.toISOString();
+    if (f.booking_length) {
+      changes[f.booking_length] = Math.round((endAt.getTime() - startAt.getTime()) / 36000) / 100;
+    }
     if (f.status) changes[f.status] = form.elements.status.value;
     if (f.service) changes[f.service] = form.elements.service.value;
 

@@ -30,7 +30,7 @@ export function renderBookingForm(body, ctx, { onCancel, onSubmit }) {
   if (!end) end = new Date(start.getTime() + config.bookings.defaultDurationMin * 60000);
 
   body.innerHTML = `
-    <form id="booking-form" class="bform" novalidate>
+    <form id="booking-form" class="bform" novalidate">
       <div class="bform-row bform-when">
         <label class="field">
           <span class="field-label">Date</span>
@@ -44,8 +44,14 @@ export function renderBookingForm(body, ctx, { onCancel, onSubmit }) {
           <span class="field-label">End</span>
           <input type="time" name="endTime" value="${timeVal(end)}" required />
         </label>
+        </div>
+        <div>
+           <label class="field">
+            <span class="field-label">Length</span>
+            <input type="text" name="booking_length" value="" readonly />
+          </label>
+        </div>
       </div>
-
       <div class="field">
         <span class="field-label">Account</span>
         <div id="account-picker"></div>
@@ -64,13 +70,13 @@ export function renderBookingForm(body, ctx, { onCancel, onSubmit }) {
       </label>
 
       ${
-        config.bookings.fields.location
+      config.bookings.fields.location
           ? `<label class="field">
                <span class="field-label">Location</span>
                <input type="text" name="location" value="${esc(config.bookings.defaultLocation)}" />
              </label>`
           : ''
-      }
+  }
 
       <label class="field">
         <span class="field-label">Notes / special instructions</span>
@@ -176,14 +182,39 @@ export function renderBookingForm(body, ctx, { onCancel, onSubmit }) {
     return { startAt, endAt };
   }
 
+  const fmtMins = (mins) => {
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    return [h ? `${h}h` : '', m ? `${m}m` : '', h || m ? '' : '0m'].filter(Boolean).join(' ');
+  };
+
+  // Total slot length, and — when more than one pet is selected — the equal
+  // consecutive slice each pet's booking gets (see createBookings / splitSlots).
+  function updateLength() {
+    const when = readWhen();
+    const el = form.elements.booking_length;
+    if (!when) {
+      el.value = '';
+      return;
+    }
+    const totalMin = Math.round((when.endAt - when.startAt) / 60000);
+    const n = state.pets.length || 1;
+    el.value =
+      n > 1
+        ? `${fmtMins(totalMin)} — ${n} × ${fmtMins(Math.floor(totalMin / n))}`
+        : fmtMins(totalMin);
+  }
+
   function updateValidity() {
     const ok = Boolean(state.account && state.pets.length && readWhen());
     submitBtn.disabled = !ok;
+    updateLength();
   }
 
   ['date', 'startTime', 'endTime'].forEach((n) =>
     form.elements[n].addEventListener('input', updateValidity),
   );
+  updateLength();
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();

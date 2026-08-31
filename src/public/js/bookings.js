@@ -67,6 +67,18 @@ export function getBooking(id) {
   return api.get(`${modulePath}/${encodeURIComponent(id)}`);
 }
 
+// The single related record on one of the booking's relationship links
+// (e.g. its account or pet), or null. Bookings are linked via the SugarCRM
+// relationship endpoint, not a relate id field, so this is how the read views
+// resolve the account / pet behind a booking.
+export async function getBookingRelated(bookingId, linkName) {
+  if (!bookingId || !linkName) return null;
+  const res = await api.get(
+    `${modulePath}/${encodeURIComponent(bookingId)}/link/${encodeURIComponent(linkName)}?max_num=1`,
+  );
+  return (res?.records ?? [])[0] ?? null;
+}
+
 // --- Phase 5: update / delete / group / history ------------------
 
 export function isBookingLocked(status) {

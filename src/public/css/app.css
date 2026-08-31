@@ -281,7 +281,7 @@ body {
   cursor: pointer;
   padding: 0 4px;
 }
-.modal-body { padding: 16px; overflow-y: auto; }
+.modal-body { padding: 16px; overflow: auto; height: 450px; }
 .modal-note {
   margin: 12px 0 0;
   font-size: 13px;
@@ -330,9 +330,10 @@ body {
 /* --- booking form -------------------------------------------------- */
 
 .bform .field { margin-bottom: 14px; }
-.bform-when { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 10px; }
+.bform-when { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.1fr; gap: 10px; }
 .bform select,
 .bform textarea,
+.bform input[type="text"],
 .bform input[type="date"],
 .bform input[type="time"] {
   width: 100%;
@@ -344,6 +345,7 @@ body {
   border-radius: var(--radius);
 }
 .bform textarea { resize: vertical; }
+.bform input[readonly] { background: var(--bg-muted, rgba(127, 127, 127, 0.08)); color: var(--text-muted); }
 
 .account-panel {
   border: 1px solid var(--border);
@@ -439,7 +441,6 @@ body {
 
 @media (max-width: 480px) {
   .bform-when { grid-template-columns: 1fr 1fr; }
-  .bform-when .field:first-child { grid-column: 1 / -1; }
 }
 
 /* --- spinner + toast ----------------------------------------------- */
@@ -486,3 +487,5 @@ body {
   .spinner { animation-duration: 1.4s; }
   .toast { transition: none; }
 }
+
+

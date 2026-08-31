@@ -44,20 +44,21 @@ export function mountCalendar(el) {
         });
     },
 
-    // Click a day / drag a time range -> create.
+    // On touch devices a quick tap fires `dateClick` but not `select` (which
+    // needs a long-press), so the create modal never opened on mobile. Handle
+    // both, with a short guard so a desktop click — which fires both — only
+    // opens one modal.
+    selectLongPressDelay: 250,
+
+    // Drag a time range -> create.
     select: (info) => {
       calendar.unselect();
-      if (!can('create')) {
-        toast('You do not have permission to create bookings.', 'error');
-        return;
-      }
-      openBookingModal({
-        mode: 'create',
-        start: info.start,
-        end: info.end,
-        allDay: info.allDay,
-        onSaved: () => calendar.refetchEvents(),
-      });
+      openCreate({ start: info.start, end: info.end, allDay: info.allDay });
+    },
+
+    // Tap / click a single day or time slot -> create.
+    dateClick: (info) => {
+      openCreate({ start: info.date, end: null, allDay: info.allDay });
     },
 
     // Click an existing booking -> detail view / edit / delete.
@@ -70,6 +71,26 @@ export function mountCalendar(el) {
       });
     },
   });
+
+  // Shared create entry point for `select` (drag) and `dateClick` (tap). A
+  // desktop click triggers both within a few ms; the guard collapses that to
+  // one modal.
+  let lastCreateAt = 0;
+  function openCreate({ start, end, allDay }) {
+    if (!can('create')) return; // Create UI is already hidden for these users.
+
+    const now = Date.now();
+    if (now - lastCreateAt < 500) return;
+    lastCreateAt = now;
+
+    openBookingModal({
+      mode: 'create',
+      start,
+      end,
+      allDay,
+      onSaved: () => calendar.refetchEvents(),
+    });
+  }
 
   calendar.render();
 

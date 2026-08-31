@@ -1,5 +1,17 @@
+/.env
+/.idea/
+
+# Alfred framework (src/backend)
+/src/backend/vendor/
+/src/backend/.env
+/src/backend/storage/*.sqlite
+/src/backend/.phpunit.result.cache
+
+# nginx runtime logs (bind-mounted from the container)
+/src/public/logs/*.log
+
+# legacy paths (pre-restructure)
 /src/vendor/
 /src/.env
 /src/storage/*.sqlite
-/.idea/
 /src/.phpunit.result.cache

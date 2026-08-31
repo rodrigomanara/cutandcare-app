@@ -1,8 +1,8 @@
 <?php
 
-namespace Albert\Tests\Http;
+namespace Albert\backend\tests\Http;
 
-use Albert\Core\Http\Router;
+use Albert\backend\Core\Http\Router;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -3,13 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#1f6feb" />
+  <meta name="theme-color" content="#f4f5f7" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)" />
   <title>Sign in · Cut &amp; Care Bookings</title>
+
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="favicon.ico" sizes="48x48" />
+  <link rel="icon" href="icons/icon-192.png" type="image/png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="C&amp;C Bookings" />
+
   <link rel="stylesheet" href="css/app.css" />
 </head>
 <body class="auth-body">
   <main class="auth-card">
-    <h1 class="auth-title">Cut &amp; Care</h1>
+    <div class="auth-card__content">
+      <img src="https://www.cutandcare.co.uk/image/cutandcare-log.svg" style="
+    width: 100%;
+">
+    </div>
     <p class="auth-subtitle">Booking system</p>
 
     <p id="login-error" class="form-error" role="alert" hidden></p>
@@ -31,5 +46,6 @@
   </main>
 
   <script type="module" src="js/pages/login.js"></script>
+  <script type="module" src="js/pwa.js"></script>
 </body>
 </html>

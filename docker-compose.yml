@@ -1,10 +1,28 @@
 services:
   nginx:
-    container_name: "Webapp"
+    container_name: "webapp"
     image: nginx:latest
+    restart: unless-stopped
     ports:
       - "8080:80"
     volumes:
       - ./src/public:/var/www/html
       - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - shared_network
 
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    restart: always
+    depends_on:
+      - nginx
+    env_file:
+      - .env
+    networks:
+      - shared_network
+
+networks:
+  shared_network:
+    driver: bridge

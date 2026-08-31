@@ -26,12 +26,19 @@ function openCreateModal({ start, end, allDay, onSaved }) {
         {
           onCancel: () => close('cancel'),
           onSubmit: async (payload) => {
-            const { created, failed } = await createBookings(payload);
+            const { created, failed, linkWarnings = [] } = await createBookings(payload);
 
             if (failed.length) {
               toast(
                 `Created ${created.length} of ${created.length + failed.length} bookings. ` +
                   `Failed: ${failed.map((x) => x.petName).join(', ')}.`,
+                'error',
+                7000,
+              );
+            } else if (linkWarnings.length) {
+              toast(
+                `Created ${created.length} booking${created.length === 1 ? '' : 's'}, but linking ` +
+                  `account/pet failed for: ${linkWarnings.join('; ')}.`,
                 'error',
                 7000,
               );

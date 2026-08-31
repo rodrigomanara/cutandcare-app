@@ -4,6 +4,7 @@ import { openModal, confirmDialog } from './modal.js';
 import { renderBookingEditForm } from './booking-edit-form.js';
 import {
   getBooking,
+  getBookingRelated,
   getBookingAudit,
   listGroupMembers,
   isBookingLocked,
@@ -46,13 +47,11 @@ async function load(id, body, close, onChanged) {
   const booking = await getBooking(id);
   const f = B.fields;
 
-  const accountId = booking[f.account];
-  const petId = booking[f.pet];
   const groupId = f.group ? booking[f.group] : null;
 
   const [account, pet, group, audit] = await Promise.all([
-    accountId ? getAccount(accountId).catch(() => null) : null,
-    petId ? getPet(petId).catch(() => null) : null,
+    resolveLinked(id, B.links?.account, getAccount),
+    resolveLinked(id, B.links?.pet, getPet),
     groupId ? listGroupMembers(groupId).catch(() => []) : [],
     getBookingAudit(id),
   ]);
@@ -60,6 +59,18 @@ async function load(id, body, close, onChanged) {
   const status = booking[f.status] ?? null;
   const locked = isBookingLocked(status);
   renderView(body, { booking, account, pet, group, audit, status, locked }, { close, onChanged });
+}
+
+// Resolve the account / pet behind a booking through its relationship link,
+// then load the full record for display. Any failure -> null (the view falls
+// back to the relate `_name` field on the booking).
+async function resolveLinked(bookingId, linkName, fetchFull) {
+  try {
+    const rec = await getBookingRelated(bookingId, linkName);
+    return rec?.id ? await fetchFull(rec.id) : null;
+  } catch {
+    return null;
+  }
 }
 
 function renderView(body, model, { close, onChanged }) {

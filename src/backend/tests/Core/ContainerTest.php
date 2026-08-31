@@ -1,8 +1,8 @@
 <?php
 
-namespace Albert\Tests\Core;
+namespace Albert\backend\tests\Core;
 
-use Albert\Core\Container;
+use Albert\backend\Core\Container;
 use PHPUnit\Framework\TestCase;
 
 class ContainerTest extends TestCase

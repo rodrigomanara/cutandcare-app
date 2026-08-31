@@ -14,7 +14,12 @@ readonly class HomeController
 
     public function index(Request $request): Response
     {
-        return new Response($this->view->render('welcome.twig', ['name' => 'World']));
+
+        $data = $request->request->all();
+        ;
+
+        return new Response(json_encode($data));
+
     }
 
     public function hello(Request $request): Response

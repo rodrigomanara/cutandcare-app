@@ -4,6 +4,9 @@ namespace Albert\Core\Http;
 
 
 
+use Albert\Core\Http\Request;
+use Albert\Core\Http\Route;
+
 class Router
 {
     /** @var Route[] */

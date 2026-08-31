@@ -85,8 +85,10 @@ function storeTokenResponse(data) {
 
 async function tokenRequest(body) {
   let res;
+  let apiHref= apiUrl('oauth2/token');
+  console.log(apiHref);
   try {
-    res = await fetch(apiUrl('oauth2/token'), {
+    res = await fetch(apiHref, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
       body: JSON.stringify(body),

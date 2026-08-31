@@ -6,10 +6,10 @@
 
 export const config = {
   // Base URL of the SugarCRM instance. No trailing slash, no /rest/... suffix.
-  sugarBaseUrl: 'https://local-crm.cutandcare.co.uk/',
+  sugarBaseUrl: '/backend',
 
   // REST API version segment (v10 / v11 / v11_x). Phase spec targets v11+.
-  apiVersion: 'v11',
+  apiVersion: 'v11_26',
 
   // OAuth2 client. "sugar" is SugarCRM's built-in first-party password client
   // and has an empty secret. Only change this if an admin registered a
@@ -40,19 +40,33 @@ export const config = {
 
     fields: {
       // Datetime the booking starts / ends (SugarCRM `datetime` fields).
-      start: 'date_start',
-      end: 'date_end',
+      start: 'booking_start_time_c',
+      end: 'booking_end_time_c',
       // Short label shown on the calendar event.
       title: 'name',
       // Status dropdown driving the event colour.
-      status: 'status',
+      status: 'booking_status_c',
       // Service / booking type dropdown.
       service: 'service_type_c',
       // Free-text notes / special instructions.
       notes: 'description',
-      // Related record ids.
-      account: 'account_id',
-      pet: 'pet_c',
+      // Datetime the booking is booked for — set to the booking's start
+      // datetime on create (same value as `start`).
+      bookingDateTime: 'booking_date_time_c',
+      // Reminder fields written on create: a boolean "send a reminder" flag and
+      // the lead time in hours before the booking (see reminderLeadHours).
+      sendReminder: 'send_booking_reminder_c',
+      reminderIn: 'reminder_in_c',
+      // Relate fields read back from a booking record (populated by Sugar once
+      // the relationship link below is set). Used by the detail/read views.
+      account: 'accounts_gr_booking_1_name',
+      pet: 'gr_pet_gr_booking_1_name',
+      // Relate id field for the pet link (Sugar's deterministic name for the
+      // `gr_pet_gr_booking_1` relationship). Used only to filter the
+      // double-booking check by pet; the check fails open if this is wrong.
+      petId: 'gr_pet_gr_booking_1gr_pet_ida',
+      // Duration of the (per-pet) booking, in hours (e.g. 2.5).
+      booking_length: 'booking_length_c',
       // Optional: a text field that holds a shared id across the records
       // generated from one multi-pet submit. Leave '' to disable grouping
       // (the group id is still returned to the UI, just not persisted).
@@ -61,8 +75,21 @@ export const config = {
       location: '',
     },
 
-    // Status assigned to a newly created booking.
-    newStatus: 'pending',
+    // SugarCRM relationship link names used to link a new booking to its
+    // account and pet. Setting a relate `_name` field on create does NOT link
+    // the records — the app POSTs to `{module}/{id}/link` with these names
+    // instead. Both are one-to-many (Account / Pet is the "one" side).
+    links: {
+      account: 'accounts_gr_booking_1',
+      pet: 'gr_pet_gr_booking_1',
+    },
+
+    // Status assigned to a newly created booking (a `booking_status_c`
+    // dropdown key — must match Sugar exactly).
+    newStatus: 'Reserved',
+
+    // Lead time (hours) written to `reminderIn` on create.
+    reminderLeadHours: 8,
 
     // Default location written to new bookings when the form has no value
     // (only used if fields.location is set).
@@ -90,8 +117,11 @@ export const config = {
     // Booking status value -> event colour. Keys must match the module's
     // status dropdown option keys exactly. Anything not listed falls back
     // to `statusColorDefault`.
+    // NOTE: only `Reserved` is a confirmed `booking_status_c` key so far — the
+    // rest below (and freeingStatuses / lockedStatuses / archiveStatus) are
+    // placeholders until the real dropdown values are known.
     statusColors: {
-      pending: '#d29922',
+      Reserved: '#d29922',
       confirmed: '#1a7f37',
       completed: '#6e7781',
     },
@@ -135,11 +165,11 @@ export const config = {
   // Almost certainly a custom module. Fill in the real API name, the
   // Accounts->Pets relationship link name, and the field names.
   pets: {
-    module: 'cnc_Pets',
+    module: 'GR_Pet',
 
     // Preferred: relationship link name on the Accounts module that returns
     // this account's pets — fetched via GET /Accounts/{id}/link/{accountLink}.
-    accountLink: 'cnc_pets_accounts',
+    accountLink: 'accounts_gr_pet_1',
     // Fallback when accountLink is null: filter the pets module where this
     // field equals the account id.
     fields: {
@@ -147,7 +177,7 @@ export const config = {
       name: 'name',
       breed: 'breed_c',
       dob: 'dob_c',
-      healthNotes: 'health_notes_c',
+      healthNotes: 'description',
       allergies: 'allergies_c',
       status: '',
       inactiveValues: [],

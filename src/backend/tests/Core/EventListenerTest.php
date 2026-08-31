@@ -1,8 +1,8 @@
 <?php
 
-namespace Albert\Tests\Core;
+namespace Albert\backend\tests\Core;
 
-use Albert\Core\EventListener;
+use Albert\backend\Core\EventListener;
 use PHPUnit\Framework\TestCase;
 
 class EventListenerTest extends TestCase
