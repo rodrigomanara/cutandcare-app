@@ -1,6 +1,6 @@
 <?php
 
-namespace Albert\View;
+namespace Albert\Core\View;
 
 use Twig\Environment;
 use Twig\Error\LoaderError;

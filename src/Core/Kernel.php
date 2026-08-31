@@ -2,12 +2,12 @@
 
 namespace Albert\Core;
 
-use Albert\Http\MiddlewareInterface;
-use Albert\Http\Router;
+use Albert\Core\Http\MiddlewareInterface;
+use Albert\Core\Http\Request;
+use Albert\Core\Http\Response;
+use Albert\Core\Http\Router;
 use Closure;
 use Throwable;
-use Albert\Http\Request;
-use Albert\Http\Response;
 
 class Kernel
 {

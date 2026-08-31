@@ -1,8 +1,8 @@
 <?php
 
-namespace Albert\Http\Middleware;
+namespace Albert\Core\Http\Middleware;
 
-use Albert\Http\MiddlewareInterface;
+use Albert\Core\Http\MiddlewareInterface;
 use Closure;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

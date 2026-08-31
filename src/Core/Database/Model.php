@@ -1,6 +1,6 @@
 <?php
 
-namespace Albert\Database;
+namespace Albert\Core\Database;
 
 use Doctrine\DBAL\Connection as DbalConnection;
 use RuntimeException;

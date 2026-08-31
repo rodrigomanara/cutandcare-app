@@ -1,6 +1,6 @@
 <?php
 
-namespace Albert\Http;
+namespace Albert\Core\Http;
 
 use Closure;
 use Symfony\Component\HttpFoundation\Request;

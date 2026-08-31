@@ -2,7 +2,7 @@
 
 namespace Albert\Tests\Http;
 
-use Albert\Http\Router;
+use Albert\Core\Http\Router;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 

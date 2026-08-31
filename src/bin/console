@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-use Albert\Console\Commands\MakeControllerCommand;
-use Albert\Console\Commands\RouteListCommand;
+use Albert\Core\Console\Commands\MakeControllerCommand;
+use Albert\Core\Console\Commands\RouteListCommand;
 use Symfony\Component\Console\Application;
 
 $kernel = require __DIR__ . '/../bootstrap.php';

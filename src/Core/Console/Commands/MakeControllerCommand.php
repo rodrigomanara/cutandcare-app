@@ -1,6 +1,6 @@
 <?php
 
-namespace Albert\Console\Commands;
+namespace Albert\Core\Console\Commands;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

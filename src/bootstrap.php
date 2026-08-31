@@ -2,11 +2,11 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
+use Albert\Core\Database\Connection;
+use Albert\Core\Database\Model;
+use Albert\Core\Http\Middleware\AddHeaderMiddleware;
 use Albert\Core\Kernel;
-use Albert\Database\Connection;
-use Albert\Database\Model;
-use Albert\Http\Middleware\AddHeaderMiddleware;
-use Albert\View\View;
+use Albert\Core\View\View;
 use Dotenv\Dotenv;
 
 if (file_exists(__DIR__ . '/.env')) {

@@ -2,9 +2,9 @@
 
 namespace Albert\App\Http\Controllers;
 
-use Albert\Http\Request;
-use Albert\Http\Response;
-use Albert\View\View;
+use Albert\Core\Http\Request;
+use Albert\Core\Http\Response;
+use Albert\Core\View\View;
 
 readonly class HomeController
 {

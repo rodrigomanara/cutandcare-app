@@ -1,6 +1,6 @@
 <?php
 
-namespace Albert\Http;
+namespace Albert\Core\Http;
 
 class Route
 {

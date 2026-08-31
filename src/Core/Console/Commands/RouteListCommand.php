@@ -1,8 +1,8 @@
 <?php
 
-namespace Albert\Console\Commands;
+namespace Albert\Core\Console\Commands;
 
-use Albert\Http\Router;
+use Albert\Core\Http\Router;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
