@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1f6feb" />
+  <title>Cut &amp; Care Bookings</title>
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body class="app-body">
+  <div id="progress-bar" class="progress-bar" role="progressbar" aria-hidden="true"></div>
+  <header class="app-bar">
+    <span class="app-bar-title">Cut &amp; Care</span>
+    <div class="app-bar-user">
+      <span id="whoami" class="whoami">…</span>
+      <button id="logout-btn" type="button" class="btn btn--ghost btn--sm">Sign out</button>
+    </div>
+  </header>
+
+  <main id="app-main" class="app-main">
+    <div class="calendar-wrap">
+      <div id="calendar-legend" class="calendar-legend"></div>
+      <div id="calendar" class="calendar"></div>
+    </div>
+  </main>
+
+  <script src="vendor/fullcalendar/index.global.min.js"></script>
+  <script type="module" src="js/pages/app.js"></script>
+</body>
+</html>

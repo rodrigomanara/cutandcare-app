@@ -1,0 +1,173 @@
+// SugarCRM connection settings for the booking webapp.
+//
+// This file is the single place to point the app at a SugarCRM instance.
+// It ships to the browser as-is, so it must never contain a client secret
+// for a confidential OAuth2 client — only the public "sugar" password client.
+
+export const config = {
+  // Base URL of the SugarCRM instance. No trailing slash, no /rest/... suffix.
+  sugarBaseUrl: 'https://local-crm.cutandcare.co.uk/',
+
+  // REST API version segment (v10 / v11 / v11_x). Phase spec targets v11+.
+  apiVersion: 'v11',
+
+  // OAuth2 client. "sugar" is SugarCRM's built-in first-party password client
+  // and has an empty secret. Only change this if an admin registered a
+  // dedicated client for this app.
+  clientId: 'sugar',
+  clientSecret: '',
+
+  // Platform string sent with every token request. Register a matching custom
+  // platform in Sugar (Admin > Configure API Platforms) so signing in here does
+  // NOT evict the user's regular web session (which uses platform "base").
+  platform: 'cutandcare',
+
+  // Refresh the access token this many milliseconds before it expires.
+  refreshLeadTimeMs: 5 * 60 * 1000,
+
+  // Transient-failure retry policy (network / 429 / 5xx).
+  maxRetries: 3,
+
+  // Log every REST call to the console for debugging.
+  debug: true,
+
+  // --- Bookings module -------------------------------------------------
+  // The custom SugarCRM module that stores bookings, plus the mapping from
+  // its fields to the ones the calendar needs. Fill in the real module API
+  // name and field names for the target instance.
+  bookings: {
+    module: 'GR_Booking',
+
+    fields: {
+      // Datetime the booking starts / ends (SugarCRM `datetime` fields).
+      start: 'date_start',
+      end: 'date_end',
+      // Short label shown on the calendar event.
+      title: 'name',
+      // Status dropdown driving the event colour.
+      status: 'status',
+      // Service / booking type dropdown.
+      service: 'service_type_c',
+      // Free-text notes / special instructions.
+      notes: 'description',
+      // Related record ids.
+      account: 'account_id',
+      pet: 'pet_c',
+      // Optional: a text field that holds a shared id across the records
+      // generated from one multi-pet submit. Leave '' to disable grouping
+      // (the group id is still returned to the UI, just not persisted).
+      group: '',
+      // Optional: a field for the shared booking location.
+      location: '',
+    },
+
+    // Status assigned to a newly created booking.
+    newStatus: 'pending',
+
+    // Default location written to new bookings when the form has no value
+    // (only used if fields.location is set).
+    defaultLocation: '',
+
+    // Statuses that no longer occupy the slot, so they are ignored by the
+    // double-booking check.
+    freeingStatuses: ['completed', 'cancelled'],
+
+    // Statuses that lock a booking against editing (Phase 5.3).
+    lockedStatuses: ['completed'],
+
+    // Delete behaviour (Phase 5.4): 'hard' issues DELETE; 'soft' keeps the
+    // record and sets its status to `archiveStatus` for the audit trail.
+    deleteMode: 'hard',
+    archiveStatus: 'cancelled',
+
+    // Default booking length (minutes) when the calendar click has no end.
+    defaultDurationMin: 60,
+
+    // Service-type dropdown options as { key: label }. Leave null to fetch them
+    // live from `GET {module}/enum/{service field}`.
+    serviceOptions: null,
+
+    // Booking status value -> event colour. Keys must match the module's
+    // status dropdown option keys exactly. Anything not listed falls back
+    // to `statusColorDefault`.
+    statusColors: {
+      pending: '#d29922',
+      confirmed: '#1a7f37',
+      completed: '#6e7781',
+    },
+    statusColorDefault: '#1f6feb',
+
+    // Page size when fetching bookings for a visible date range.
+    pageSize: 200,
+  },
+
+  // --- Accounts (stock module) --------------------------------------
+  accounts: {
+    module: 'Accounts',
+    // Field the searchable picker matches against (prefix match).
+    searchField: 'name',
+    fields: {
+      name: 'name',
+      phone: 'phone_office',
+      email: 'email1',
+      street: 'billing_address_street',
+      city: 'billing_address_city',
+      state: 'billing_address_state',
+      postalcode: 'billing_address_postalcode',
+      country: 'billing_address_country',
+      // Used in Phase 4 to block bookings against inactive customers.
+      status: '',
+      inactiveValues: [],
+    },
+    // Relationship link name Accounts -> Contacts.
+    contactsLink: 'contacts',
+    contactFields: {
+      name: 'name',
+      phone: 'phone_work',
+      mobile: 'phone_mobile',
+      email: 'email1',
+      title: 'title',
+    },
+    pageSize: 20,
+  },
+
+  // --- Pets / Animals module ---------------------------------------
+  // Almost certainly a custom module. Fill in the real API name, the
+  // Accounts->Pets relationship link name, and the field names.
+  pets: {
+    module: 'cnc_Pets',
+
+    // Preferred: relationship link name on the Accounts module that returns
+    // this account's pets — fetched via GET /Accounts/{id}/link/{accountLink}.
+    accountLink: 'cnc_pets_accounts',
+    // Fallback when accountLink is null: filter the pets module where this
+    // field equals the account id.
+    fields: {
+      account: 'account_id',
+      name: 'name',
+      breed: 'breed_c',
+      dob: 'dob_c',
+      healthNotes: 'health_notes_c',
+      allergies: 'allergies_c',
+      status: '',
+      inactiveValues: [],
+    },
+    pageSize: 100,
+  },
+};
+
+// Optional dev override: set localStorage.SUGAR_BASE_URL in the browser console
+// to point at another instance without editing this file.
+try {
+  const override = localStorage.getItem('SUGAR_BASE_URL');
+  if (override) config.sugarBaseUrl = override;
+} catch {
+  /* localStorage unavailable — ignore */
+}
+
+// Build a full REST endpoint URL from a version-relative path.
+export function apiUrl(path) {
+  const base = config.sugarBaseUrl.replace(/\/+$/, '');
+  const clean = String(path).replace(/^\/+/, '');
+  return `${base}/rest/${config.apiVersion}/${clean}`;
+}

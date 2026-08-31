@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1f6feb" />
+  <title>Sign in · Cut &amp; Care Bookings</title>
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body class="auth-body">
+  <main class="auth-card">
+    <h1 class="auth-title">Cut &amp; Care</h1>
+    <p class="auth-subtitle">Booking system</p>
+
+    <p id="login-error" class="form-error" role="alert" hidden></p>
+
+    <form id="login-form" novalidate>
+      <label class="field">
+        <span class="field-label">Username or email</span>
+        <input id="username" name="username" type="text" autocomplete="username"
+               autocapitalize="none" autocorrect="off" spellcheck="false" required />
+      </label>
+
+      <label class="field">
+        <span class="field-label">Password</span>
+        <input id="password" name="password" type="password" autocomplete="current-password" required />
+      </label>
+
+      <button id="login-submit" type="submit" class="btn btn--primary btn--block">Sign in</button>
+    </form>
+  </main>
+
+  <script type="module" src="js/pages/login.js"></script>
+</body>
+</html>
